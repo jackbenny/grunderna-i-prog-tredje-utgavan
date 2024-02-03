@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+import pickle
+import sys
+import datetime
+
+# Fråga användaren om han vill ladda en tidigare kurs
+ladda = input("Vill du ladda tidigare kurs? (j/n): ")
+if (ladda == "j"):
+    # Påbörja felhanteringen för filöppningen
+    try:
+        kurs = pickle.load(open('kurs.p', 'rb'))
+    # Om filen inte finns, skriv ut ett meddelande
+    # och fråga användaren om en ny kurs (om och om
+    # igen till tills ett tal har lästs in). Spara
+    # sedan den nya kursen.
+    except FileNotFoundError:
+        print("Det finns ingen tidigare sparad kurs.")
+        while True:
+            try:
+                kurs = float(input("Ange ny USD-kurs: "))
+            except ValueError:
+                print("Ange endast flyttal eller heltal")
+            else:
+                pickle.dump(kurs,open('kurs.p', 'wb'))
+                break
+    # Om vi inte har rättigheter att läsa filen, avsluta
+    # och skriv ut ett felmeddelande.
+    except PermissionError:
+        sys.exit("Något är fel med rättigheterna för kurs.p")
+    # Logga alla läsförsök
+    finally:
+        logg = open('loggfil.txt', 'a')
+        logg.write("Läsförsök gjordes: " + 
+            str(datetime.datetime.now()) + "\n")
+        logg.close()
+        
+elif (ladda == "n"):
+    # Repetera tills ett flyttal har lästs in.
+    while True:
+        try:
+            kurs = float(input("Ange ny USD-kurs: "))
+        except ValueError:
+            print("Ange endast flyttal eller heltal")
+        else:
+            pickle.dump(kurs,open('kurs.p', 'wb'))
+            break
+else:
+    sys.exit("Var god svara (j)a eller (n)ej")
+
+# Repetera tills ett flytttal har lästs in som SEK
+while True:
+    try:
+        usd = float(input("Ange summa i USD: "))
+    except ValueError:
+        print("Ange endast flyttal eller heltal")
+    else:
+        break
+# Skriv ut svaret
+print("%.2f USD motsvarar %.2f SEK" \
+    %(usd, usd*kurs))
+
