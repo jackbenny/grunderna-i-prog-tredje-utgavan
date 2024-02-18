@@ -3,7 +3,7 @@
 def ranta(kr, ranta, ar):
     ranta = (ranta / 100) + 1
     svar = kr*ranta**ar
-    return (svar)
+    return svar
 
 pengar = float(input("Ange hur mycket pengar du har \
 på kontot: "))
