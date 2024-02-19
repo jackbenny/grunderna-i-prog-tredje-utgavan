@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-
+import sys
 import math
 
 try:
     t = int(input("Ange täljaren: "))
     n = int(input("Ange nämnaren: "))
 except ValueError:
-    exit("Ange endast heltal")
+    sys.exit("Ange endast heltal")
 
 sgd = math.gcd(t, n)
 
